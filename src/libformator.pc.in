@@ -1,0 +1,13 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+datarootdir=@datarootdir@
+datadir=@datadir@
+includedir=@includedir@/formator
+
+Name: libformator
+Description: Formator library.
+Version: @VERSION@
+Requires: 
+Libs: -L${libdir} -lformator
+Cflags: -I${includedir}
