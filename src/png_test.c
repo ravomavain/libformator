@@ -58,16 +58,13 @@ int main(int argc, char **argv)
 	formator_new_node (&FormatorNodeTypeHex, 2, header, "CRLF chars");
 	formator_new_node (&FormatorNodeTypeHex, 1, header, "EOF char");
 	formator_new_node (&FormatorNodeTypeHex, 1, header, "LF char");
-	formator_node_t *chunks = formator_new_node (&FormatorNodeTypeData, formator->tree->size, formator->tree, "PNG Chunks");
+	formator_node_t *chunks = formator_new_dyn_node (&FormatorNodeTypeData, 0x0, formator->tree, "PNG Chunks");
 	while(chunks && chunks->size > 4)
 	{
-		uint32_t chunk_size = formator_node_get_uint32 (chunks);
-		if (chunk_size == 0 || chunks->size < chunk_size+12)
-			break;
-		formator_node_t *chunk = formator_new_node (&FormatorNodeTypeData, chunk_size+12, chunks, "PNG chunk");
-		formator_new_node (&FormatorNodeTypeUInt32, 1, chunk, "Chunk length");
+		formator_node_t *chunk = formator_new_dyn_node (&FormatorNodeTypeData, 0x0, chunks, "PNG chunk");
+		formator_node_t *chunk_size = formator_new_node (&FormatorNodeTypeUInt32, 1, chunk, "Chunk length");
 		formator_new_node (&FormatorNodeTypeString, 4, chunk, "Chunk type");
-		formator_new_node (&FormatorNodeTypeHex, chunk_size, chunk, "Chunk data");
+		formator_new_dyn_node (&FormatorNodeTypeHex, chunk_size, chunk, "Chunk data");
 		formator_new_node (&FormatorNodeTypeHex, 4, chunk, "Chunk CRC");
 	}
 

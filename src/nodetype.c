@@ -98,65 +98,31 @@ int formator_printf_node_type_string(FILE *stream, formator_node_t *node, format
 
 int formator_printf_node_type_int(FILE *stream, formator_node_t *node, formator_printf_info info)
 {
-	intmax_t i;
-	int sign;
 	if (!node)
 		return -1;
-	if (formator_nodetype_cmp(node->type, &FormatorNodeTypeInt8))
-	{
-		i = formator_node_get_int8(node);
-		sign = 1;
-	}
-	else if (formator_nodetype_cmp(node->type, &FormatorNodeTypeUInt8))
-	{
-		i = formator_node_get_uint8(node);
-		sign = 0;
-	}
-	else if (formator_nodetype_cmp(node->type, &FormatorNodeTypeInt16)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntbe16)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntle16))
-	{
-		i = formator_node_get_int16(node);
-		sign = 1;
-	}
-	else if (formator_nodetype_cmp(node->type, &FormatorNodeTypeUInt16)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntbe16)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntle16))
-	{
-		i = formator_node_get_uint16(node);
-		sign = 0;
-	}
-	else if (formator_nodetype_cmp(node->type, &FormatorNodeTypeInt32)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntbe32)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntle32))
-	{
-		i = formator_node_get_int32(node);
-		sign = 1;
-	}
-	else if (formator_nodetype_cmp(node->type, &FormatorNodeTypeUInt32)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntbe32)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntle32))
-	{
-		i = formator_node_get_uint32(node);
-		sign = 0;
-	}
-	else if (formator_nodetype_cmp(node->type, &FormatorNodeTypeInt64)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntbe64)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntle64))
-	{
-		i = formator_node_get_int64(node);
-		sign = 1;
-	}
-	else if (formator_nodetype_cmp(node->type, &FormatorNodeTypeUInt64)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntbe64)
-		  || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntle64))
-	{
-		i = formator_node_get_uint64(node);
-		sign = 0;
-	}
-	else
-		return -1;
-	return formator_print_int (stream, i, sign, 10, 0, info);
+	if (formator_nodetype_cmp(node->type, &FormatorNodeTypeInt8)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeInt16)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntbe16)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntle16)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeInt32)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntbe32)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntle32)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeInt64)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntbe64)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeIntle64))
+		return formator_print_int (stream, formator_node_get_int(node), 1, 10, 0, info);
+	else if (formator_nodetype_cmp(node->type, &FormatorNodeTypeUInt8)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeUInt16)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntbe16)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntle16)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeUInt32)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntbe32)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntle32)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeUInt64)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntbe64)
+	 || formator_nodetype_cmp(node->type, &FormatorNodeTypeUIntle64))
+		return formator_print_int (stream, formator_node_get_uint(node), 0, 10, 0, info);
+	return -1;
 }
 
 int formator_printf_node_type_hex(FILE *stream, formator_node_t *node, formator_printf_info info)

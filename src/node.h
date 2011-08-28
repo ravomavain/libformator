@@ -38,12 +38,13 @@
 #  include <formator/nodetype.h>
 #endif
 
-typedef enum DataLocation
+typedef struct formator_node_flags
 {
-	DATALOC_MEMORY,
-	DATALOC_MEMORY_AND_FILE,
-	DATALOC_FILE
-} DataLocation;
+	int mem_allocated:1;
+	int from_file:1;
+	int dyn_size:1;
+	int modified:1;
+} formator_node_flags_t;
 
 typedef struct formator_node
 {
@@ -53,6 +54,7 @@ typedef struct formator_node
 	struct formator_node *next;
 	struct formator_node *prev;
 	struct formator_node *root;
+	struct formator_node *size_node;
 
 	void *data;
 	void *data_start;
@@ -63,12 +65,13 @@ typedef struct formator_node
 	off_t total_size;
 	int depth;
 	formator_node_type_t *type;
+	formator_node_flags_t flags;
 	void *extra;
 	Endianness *endianness;
-	DataLocation location;
 } formator_node_t;
 
 formator_node_t *formator_new_node(formator_node_type_t *type, off_t length, formator_node_t *parent, void *extra);
+formator_node_t *formator_new_dyn_node(formator_node_type_t *type, formator_node_t *size_node, formator_node_t *parent, void *extra);
 formator_node_t *formator_create_root(void *data, off_t size, Endianness *endianness);
 formator_node_t *formator_create_root_file(FILE *file, off_t size, Endianness *endianness);
 
@@ -85,5 +88,21 @@ int8_t formator_node_get_int8(formator_node_t *node);
 int16_t formator_node_get_int16(formator_node_t *node);
 int32_t formator_node_get_int32(formator_node_t *node);
 int64_t formator_node_get_int64(formator_node_t *node);
+uintmax_t formator_node_get_uint(formator_node_t *node);
+intmax_t formator_node_get_int(formator_node_t *node);
+
+void formator_node_set_data(formator_node_t *node, void *data, size_t size);
+void formator_node_set_string(formator_node_t *node, const char *value);
+void formator_node_set_uint8(formator_node_t *node, uint8_t value);
+void formator_node_set_uint16(formator_node_t *node, uint16_t value);
+void formator_node_set_uint32(formator_node_t *node, uint32_t value);
+void formator_node_set_uint64(formator_node_t *node, uint64_t value);
+void formator_node_set_int8(formator_node_t *node, int8_t value);
+void formator_node_set_int16(formator_node_t *node, int16_t value);
+void formator_node_set_int32(formator_node_t *node, int32_t value);
+void formator_node_set_int64(formator_node_t *node, int64_t value);
+void formator_node_set_int(formator_node_t *node, off_t value);
+void formator_node_set_uint(formator_node_t *node, uintmax_t value);
+void formator_node_set_size (formator_node_t *node, off_t size);
 
 #endif /*FORMATOR_NODE_H*/
